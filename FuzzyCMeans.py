@@ -10,7 +10,7 @@ class FuzzyCMeans:
         self.inputDataCopy = self.inputData
         self.numberOfClusters = numberOfClusters
         self.numberOfInstances, self.numberOfFeatures = self.inputData.shape
-        self.MAX_ITER = 4
+        self.MAX_ITER = 1000
         self.membershipMatrix= []
         self.clusterMembership=[]
         #default fuzzifier value is 2
