@@ -2,12 +2,13 @@ from collections import defaultdict
 
 import numpy
 import math
-
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
 # import itertools from izip
-# points = numpy.array([[1, 2, 2], [3, 2, 2], [6, 5, 5], [6,5,1]])
+points = numpy.array ([[1, 2, 2], [3, 2, 2], [6, 5, 5], [6, 5, 1]])
 from scipy.spatial import distance
 
-points = numpy.array ([[1, 3], [1.5, 3.2], [1.3, 2.8], [3, 1]])
+#points = numpy.array ([[1, 3], [1.5, 3.2], [1.3, 2.8], [3, 1]])
 
 
 class FuzzyCMeans:
@@ -23,6 +24,7 @@ class FuzzyCMeans:
         self.fuzzifier = fuzzyfier
         self.fuzzyCentres = []
         self.clusteredData = []
+        self.iterationResults = []
         # print("input data",self.inputData)
         # print("number of cluster",self.numberOfClusters)
         # print("number of instances",self.numberOfInstances)
@@ -160,6 +162,34 @@ class FuzzyCMeans:
         rValue = float (rValue) / float (self.numberOfClusters)
         return rValue
 
+    def plotCMeans(self, iterationResults, x_axis_label="", y_axis_label="", z_axis_label="", plot_title=""):
+
+        fig = plt.figure ()
+        colors = ['r', 'g', 'b', 'y']
+        ax = fig.add_subplot (111, projection='3d')
+        # print("new centroid")
+        # for centroidIndex,dataPoints in iterationResults.items():
+        # print(self.centroid[centroidIndex],dataPoints)
+
+        # print("end of clustering results")
+        for centroidIndex, dataPoints in iterationResults.items ():
+            # print("final centroids")
+
+            finalData = numpy.array (dataPoints)
+            # print("numpy datapoints")
+
+            # print(numpy.array(dataPoints))
+            ax.scatter (finalData[:, 0], finalData[:, 1], finalData[:, 2], c=colors[centroidIndex], marker='o')
+            ax.scatter (self.fuzzyCentres[centroidIndex][0], self.fuzzyCentres[centroidIndex][1],
+                        self.fuzzyCentres[centroidIndex][2], c=colors[centroidIndex], marker='*');
+            # ax.scatter(x, y, z, c='r', marker='o')
+
+            ax.set_xlabel ('X Label')
+            ax.set_ylabel ('Y Label')
+            ax.set_zlabel ('Z Label')
+
+        plt.show ()
+
 
 fuzzyCMeansObj = FuzzyCMeans (inputDataFrame=points, numberOfClusters=2, fuzzyfier=2)
 fuzzyCMeansObj.fuzzyCMeansCoreAlgorithm ()
@@ -177,7 +207,8 @@ for hardClusterCounter in range (len (fuzzyCMeansObj.clusterMembership)):
     # print(fuzzyCMeansObj.inputData[hardClusterCounter])
     clusteredDataInAnotherFormat[fuzzyCMeansObj.clusterMembership[hardClusterCounter]].append (
         fuzzyCMeansObj.inputData[hardClusterCounter])
-
+fuzzyCMeansObj.iterationResults=clusteredDataInAnotherFormat
 fuzzyCMeansObj.clusteredData = [clusteredDataInAnotherFormat[k] for k in range (fuzzyCMeansObj.numberOfClusters)]
 print (fuzzyCMeansObj.clusteredData)
 print (fuzzyCMeansObj.daviesBouldinIndex ())
+fuzzyCMeansObj.plotCMeans(fuzzyCMeansObj.iterationResults)
