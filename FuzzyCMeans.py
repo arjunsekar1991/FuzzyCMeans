@@ -5,7 +5,7 @@ import math
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 # import itertools from izip
-points = numpy.array ([[1, 2, 2], [3, 2, 2], [6, 5, 5], [6, 5, 1]])
+#points = numpy.array ([[1, 2, 2], [3, 2, 2], [6, 5, 5], [6, 5, 1]])
 from scipy.spatial import distance
 
 #points = numpy.array ([[1, 3], [1.5, 3.2], [1.3, 2.8], [3, 1]])
@@ -189,7 +189,19 @@ class FuzzyCMeans:
             ax.set_zlabel ('Z Label')
 
         plt.show ()
+import pandas as pd
+fields = ['all_NBME_avg_n4', 'all_PIs_avg_n131', 'HD_final']
 
+df = pd.read_csv('BSOM_DataSet_revised.csv', skipinitialspace=True, usecols=fields)
+# See the keys
+print (df.keys())
+# See content in 'star_name'
+print(len(df))
+#for dataframeCounter in range(len (df)):
+#    print(df.all_NBME_avg_n4[dataframeCounter],"----",df.all_PIs_avg_n131[dataframeCounter],'-------',df.HD_final[dataframeCounter])
+#df.to_numpy()
+print(df.to_numpy())
+points =df.to_numpy()
 
 fuzzyCMeansObj = FuzzyCMeans (inputDataFrame=points, numberOfClusters=2, fuzzyfier=2)
 fuzzyCMeansObj.fuzzyCMeansCoreAlgorithm ()
